@@ -1,0 +1,165 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  .modal-content {
+    background: linear-gradient(135deg, #f3f3f3, #e0e0e0);
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 400px;
+    width: 90%;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transform: translateY(-20px);
+    animation: slideIn 0.3s ease-in-out forwards;
+  }
+  
+  .animated-modal {
+    opacity: 0;
+    animation: fadeInScale 0.5s forwards;
+  }
+  
+  .modal-title {
+    font-family: 'Arial', sans-serif;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #333;
+    transition: transform 0.3s;
+  }
+  
+  .close-button:hover {
+    transform: rotate(90deg);
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+    position: relative;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 10px 35px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+  }
+  
+  .form-group input:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  
+  .input-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #555;
+  }
+  
+  .login-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+    width: 100%;
+  }
+  
+  .login-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .modal-footer {
+    margin-top: 15px;
+    text-align: center;
+  }
+  
+  .modal-footer a {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  
+  .modal-footer a:hover {
+    color: #0056b3;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideIn {
+    from {
+      transform: translateY(-20px);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fadeInScale {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  .google-login-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #db4437;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin-top: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    width: 100%;
+  }
+  
+  .google-login-button:hover {
+    background-color: #c33d2e;
+  }
+  
+  .google-login-button svg {
+    margin-right: 8px;
+  }
+  

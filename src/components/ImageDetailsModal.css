@@ -1,0 +1,118 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 500px;
+  width: 90%;
+  position: relative;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.4s ease-in-out;
+}
+
+.enhanced-modal {
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #555;
+  transition: transform 0.3s;
+}
+
+.close-button:hover {
+  transform: rotate(90deg);
+  color: #d9534f;
+}
+
+.image-details-container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.modal-image {
+  max-width: 200px;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.image-details {
+  flex: 1;
+}
+
+.image-details h2 {
+  margin-top: 0;
+  color: #333;
+}
+
+.image-details p {
+  margin: 10px 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.add-to-cart-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.3s, transform 0.2s;
+  margin-top: 15px;
+}
+
+.add-to-cart-button:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+}
+
+.cart-icon {
+  font-size: 1.2rem;
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-10px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
