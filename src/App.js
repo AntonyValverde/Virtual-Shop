@@ -59,6 +59,28 @@ function App() {
     autoplay: true,
     autoplaySpeed: 2000,
   };
+
+  const offers = [
+    {
+      image: '/photos/ofertas/oferta1.jpg',
+      title: 'Mega Rebajas',
+      description: 'Aprovecha más de 1000 ofertas, todas aquí!',
+      link: '/ofertas',
+    },
+    {
+      image: '/photos/ofertas/oferta2.jpg',
+      title: 'Descuento Especial',
+      description: 'Descuentos de hasta el 50% en productos seleccionados.',
+      link: '/descuentos',
+    },
+    {
+      image: '/photos/ofertas/oferta3.jpg',
+      title: 'Descuento Especial',
+      description: 'Descuentos de hasta el 50% en productos seleccionados.',
+      link: '/descuentos',
+    },
+  ];
+
   const imagesRopa = [
     {
       id: 1,
@@ -183,6 +205,20 @@ function App() {
         <Routes>
           <Route path="/" element={
             <>
+              <section className="offers-section">
+                <Slider {...settings}>
+                  {offers.map((offer, index) => (
+                    <div key={index} className="offer-slide">
+                      <img src={offer.image} alt={offer.title} className="offer-image" />
+                      <div className="offer-overlay">
+                        <h2>{offer.title}</h2>
+                        <p>{offer.description}</p>
+                        <button onClick={() => navigate(offer.link)}>¡Ver más!</button>
+                      </div>
+                    </div>
+                  ))}
+                </Slider>
+              </section>
               <section id="section1">
                 <h2>Ropa</h2>
                 <Slider {...settings}>
