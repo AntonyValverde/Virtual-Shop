@@ -172,7 +172,7 @@ function App() {
   return (
     <div className="App">
       <header>
-        <h1>Virtual Shop</h1>
+        <h1>StiloLux</h1>
         <nav>
           <ul>
             <li><a href="#section1">Ropa</a></li>
@@ -258,9 +258,34 @@ function App() {
         </Routes>
       </main>
 
-      <footer>
-        <p>© 2024 Mi Aplicación</p>
+      <footer className="footer">
+        <div className="footer-content">
+          <div className="footer-section">
+            <h3>StiloLux</h3>
+            <p>La mejor tienda virtual para todas tus necesidades.</p>
+          </div>
+          <div className="footer-section">
+            <h4>Enlaces Rápidos</h4>
+            <ul>
+              <li><a href="#">Inicio</a></li>
+              <li><a href="#">Política de Privacidad</a></li>
+              <li><a href="#">Términos y Condiciones</a></li>
+            </ul>
+          </div>
+          <div className="footer-section">
+            <h4>Síguenos</h4>
+            <div className="social-icons">
+              <a href="#" aria-label="Facebook" className="social-icon">🔗</a>
+              <a href="#" aria-label="Twitter" className="social-icon">🔗</a>
+              <a href="#" aria-label="Instagram" className="social-icon">🔗</a>
+            </div>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <p>© 2024 StiloLux - Todos los derechos reservados.</p>
+        </div>
       </footer>
+
 
       {/* Modales */}
       <LoginModal
