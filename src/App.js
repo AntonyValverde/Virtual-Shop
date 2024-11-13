@@ -16,10 +16,17 @@ function App() {
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [selectedImageDetails, setSelectedImageDetails] = useState(null);
   const [user, setUser] = useState(null);
-
-  // Hook de navegación debe estar dentro de la función del componente
   const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
 
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+  
+  const closeMenu = () => {
+    setMenuOpen(false);
+  };
+  
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -30,6 +37,8 @@ function App() {
 
     return () => unsubscribe(); // Limpia la suscripción cuando el componente se desmonta
   }, []);
+
+   
 
   const handleLogout = () => {
     signOut(auth).then(() => {
@@ -174,11 +183,17 @@ function App() {
       <header>
         <h1>StiloLux</h1>
         <nav>
-          <ul>
-            <li><a href="#section1">Ropa</a></li>
-            <li><a href="#section2">Colonias</a></li>
-            <li><a href="#section3">Cosméticos</a></li>
-          </ul>
+          <button className="hamburger-menu" onClick={toggleMenu}>
+            ☰
+          </button>
+          <nav>
+            <ul className={`nav-links ${menuOpen ? 'active' : ''}`}>
+              <li><a href="#section1" onClick={closeMenu}>Ropa</a></li>
+              <li><a href="#section2" onClick={closeMenu}>Colonias</a></li>
+              <li><a href="#section3" onClick={closeMenu}>Cosméticos</a></li>
+            </ul>
+          </nav>
+
           <div className="nav-buttons">
             <button className="icon-button" onClick={handleCartClick}>
               <FaShoppingCart size={24} />
