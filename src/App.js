@@ -10,6 +10,7 @@ import ImageDetailsModal from './components/ImageDetailsModal';
 import { auth } from './firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import CartPage from './pages/CartPage';
+import OffersPage from './pages/OffersPage';
 
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -228,7 +229,7 @@ function App() {
                       <div className="offer-overlay">
                         <h2>{offer.title}</h2>
                         <p>{offer.description}</p>
-                        <button onClick={() => navigate(offer.link)}>¡Ver más!</button>
+                        <button onClick={() => navigate('/offers')}>¡Ver más!</button>
                       </div>
                     </div>
                   ))}
@@ -269,6 +270,7 @@ function App() {
             </>
           } />
           <Route path="/cart" element={<CartPage userEmail={user?.email} />} />
+          <Route path="/offers" element={<OffersPage />} />
           {/* Ruta para la página del carrito */}
         </Routes>
       </main>
