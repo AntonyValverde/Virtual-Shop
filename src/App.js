@@ -13,7 +13,7 @@ import { onAuthStateChanged, signOut } from 'firebase/auth';
 import CartPage from './pages/CartPage';
 import OffersPage from './pages/OffersPage';
 import Ropa from './pages/Ropa'; // Ajusta la ruta si es necesario
-
+import Colonia from './pages/Colonia';
 
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -193,7 +193,7 @@ function App() {
           <nav>
             <ul className={`nav-links ${menuOpen ? 'active' : ''}`}>
               <li><Link to="/ropa" onClick={closeMenu}>Ropa</Link></li>
-              <li><a href="#section2" onClick={closeMenu}>Colonias</a></li>
+              <li><Link to="/colonia" onClick={closeMenu}>Colonias</Link></li>
               <li><a href="#section3" onClick={closeMenu}>Cosméticos</a></li>
             </ul>
           </nav>
@@ -272,6 +272,7 @@ function App() {
               </section>
             </>
           } />
+          <Route path="/colonia" element={<Colonia />} />
           <Route path="/ropa" element={<Ropa />} /> {/* Asumiendo que tienes una página de inicio */}
           <Route path="/cart" element={<CartPage userEmail={user?.email} />} />
           <Route path="/offers" element={<OffersPage />} />
@@ -296,7 +297,7 @@ function App() {
           <div className="footer-section">
             <h4>Síguenos</h4>
             <div className="social-icons">
-              <a href="#" aria-label="Facebook" className="social-icon">🔗</a>
+              <a href="https://www.instagram.com/choma__store?igsh=dTR0czBjaDFjcDN2" aria-label="Facebook" className="social-icon">Instagram</a>
               <a href="#" aria-label="Twitter" className="social-icon">🔗</a>
               <a href="#" aria-label="Instagram" className="social-icon">🔗</a>
             </div>
