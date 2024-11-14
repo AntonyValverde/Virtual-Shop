@@ -1,99 +1,80 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FaShoppingCart, FaTrashAlt, FaArrowLeft } from 'react-icons/fa';
-import { db } from '../firebase'; // Asegúrate de que tu archivo de configuración de Firebase exporta 'db'
-import { doc, getDoc, updateDoc, arrayRemove } from 'firebase/firestore';
-import './CartPage.css';
+import React, { useState } from 'react';
+import { PublicClientApplication } from '@azure/msal-browser';
 
-const CartPage = ({ userEmail }) => {
-  const navigate = useNavigate();
-  const [cartItems, setCartItems] = useState([]);
+// Configura tu cliente MSAL
+const msalConfig = {
+  auth: {
+    clientId: 'TU_CLIENT_ID', // Reemplaza con tu clientId de Azure AD
+    authority: 'https://login.microsoftonline.com/common', // Configuración por defecto
+    redirectUri: window.location.origin, // Cambiar si es necesario
+  },
+};
 
-  useEffect(() => {
-    const fetchCartItems = async () => {
-      if (!userEmail) {
-        console.warn('No hay un correo de usuario proporcionado.');
-        return;
-      }
-      try {
-        const cartDocRef = doc(db, 'carrito', userEmail);
-        const cartDoc = await getDoc(cartDocRef);
+const msalInstance = new PublicClientApplication(msalConfig);
 
-        if (cartDoc.exists()) {
-          const data = cartDoc.data();
-          console.log('Datos del carrito:', data); // Agrega esto para depurar
-          setCartItems(data.items || []);
-        } else {
-          console.warn('El documento del carrito no existe.');
-        }
-      } catch (error) {
-        console.error('Error al obtener los datos del carrito:', error);
-      }
-    };
+const CartPage = () => {
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [accessToken, setAccessToken] = useState(null);
 
-    fetchCartItems();
-  }, [userEmail]);
-
-  const handleRemoveItem = async (item) => {
-    if (!userEmail) return;
+  // Iniciar sesión y obtener el token
+  const handleLogin = async () => {
     try {
-      const cartDocRef = doc(db, 'carrito', userEmail);
-      await updateDoc(cartDocRef, {
-        items: arrayRemove(item), // Usa arrayRemove para eliminar el item del array
+      const loginResponse = await msalInstance.loginPopup({
+        scopes: ['Files.ReadWrite'],
       });
-      setCartItems((prevItems) => prevItems.filter((i) => i.code !== item.code));
+      setAccessToken(loginResponse.accessToken);
+      console.log('Inicio de sesión exitoso');
     } catch (error) {
-      console.error('Error al eliminar el elemento:', error);
+      console.error('Error de inicio de sesión:', error);
     }
   };
 
-  const handleReturnToHome = () => {
-    navigate('/');
+  // Manejar la selección de archivos
+  const handleFileChange = (e) => {
+    setSelectedFile(e.target.files[0]);
+  };
+
+  // Subir archivo a OneDrive
+  const uploadFileToOneDrive = async () => {
+    if (!selectedFile) {
+      alert('Por favor, selecciona un archivo primero.');
+      return;
+    }
+    if (!accessToken) {
+      alert('Primero necesitas iniciar sesión.');
+      return;
+    }
+
+    const uploadUrl = `https://graph.microsoft.com/v1.0/me/drive/root:/MiCarpeta/${selectedFile.name}:/content`;
+
+    try {
+      const response = await fetch(uploadUrl, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': selectedFile.type,
+        },
+        body: selectedFile,
+      });
+
+      if (response.ok) {
+        console.log('Archivo cargado exitosamente');
+        alert('Archivo cargado exitosamente');
+      } else {
+        console.error('Error al cargar el archivo:', response.statusText);
+        alert('Error al cargar el archivo');
+      }
+    } catch (error) {
+      console.error('Error al cargar el archivo:', error);
+      alert('Error al cargar el archivo');
+    }
   };
 
   return (
-    <div className="cart-page">
-      <header className="cart-header">
-        <button className="return-button" onClick={handleReturnToHome}>
-          <FaArrowLeft size={20} /> Volver
-        </button>
-        <div className="header-content">
-          <FaShoppingCart size={30} className="cart-icon" />
-          <h1>Mi Carrito</h1>
-        </div>
-      </header>
-
-      <main className="cart-main">
-        {cartItems.length > 0 ? (
-          <div className="cart-items">
-            {cartItems.map((item, index) => (
-              <div key={index} className="cart-item">
-                <img src={item.imagen} alt={item.title} className="cart-item-image" />
-                <div className="cart-item-details">
-                  <h2>{item.title}</h2>
-                  <p><strong>Precio:</strong> {item.price}</p>
-                  <p><strong>Talla:</strong> {item.size}</p>
-                  <p><strong>Cantidad:</strong> {item.quantity}</p>
-                  <p><strong>Código:</strong> {item.code}</p>
-                </div>
-                <button className="remove-button" onClick={() => handleRemoveItem(item)}>
-                  <FaTrashAlt className="remove-icon" /> Eliminar
-                </button>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="empty-cart">Tu carrito está vacío.</p>
-        )}
-      </main>
-
-      {cartItems.length > 0 && (
-        <footer className="cart-footer">
-          <button className="order-button" onClick={() => console.log('Pedido realizado')}>
-            Hacer Pedido
-          </button>
-        </footer>
-      )}
+    <div>
+      <button onClick={handleLogin}>Iniciar sesión en OneDrive</button>
+      <input type="file" onChange={handleFileChange} />
+      <button onClick={uploadFileToOneDrive}>Cargar Imagen a OneDrive</button>
     </div>
   );
 };

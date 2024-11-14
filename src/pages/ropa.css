@@ -1,0 +1,115 @@
+.ropa-page {
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.back-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 16px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
+}
+
+.search-bar {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 300px;
+    max-width: 100%;
+    font-size: 16px;
+    height: 40px;
+}
+
+.search-bar:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.offers-grid {
+    display: grid;
+    gap: 15px;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    justify-content: center;
+}
+
+.offer-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.offer-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.offer-card img {
+    width: 100%;
+    height: auto;
+}
+
+.offer-card h3 {
+    padding: 10px;
+    text-align: center;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .top-bar {
+        flex-direction: column;
+    }
+
+    .search-bar {
+        max-width: 100%;
+    }
+
+    .offers-grid {
+        gap: 10px;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+
+    .offer-card h3 {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .offers-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+
+    .offer-card {
+        border-radius: 5px;
+    }
+
+    .offer-card h3 {
+        font-size: 12px;
+        padding: 8px;
+    }
+}

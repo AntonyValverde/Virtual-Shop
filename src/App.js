@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Slider from 'react-slick';
+import { Link } from 'react-router-dom';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import { FaShoppingCart, FaUserCircle } from 'react-icons/fa';
 import 'slick-carousel/slick/slick.css';
@@ -11,6 +12,8 @@ import { auth } from './firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import CartPage from './pages/CartPage';
 import OffersPage from './pages/OffersPage';
+import Ropa from './pages/Ropa'; // Ajusta la ruta si es necesario
+
 
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -182,14 +185,14 @@ function App() {
   return (
     <div className="App">
       <header>
-        <h1>StiloLux</h1>
+        <h1>StyLux</h1>
         <nav>
           <button className="hamburger-menu" onClick={toggleMenu}>
             ☰
           </button>
           <nav>
             <ul className={`nav-links ${menuOpen ? 'active' : ''}`}>
-              <li><a href="#section1" onClick={closeMenu}>Ropa</a></li>
+              <li><Link to="/ropa" onClick={closeMenu}>Ropa</Link></li>
               <li><a href="#section2" onClick={closeMenu}>Colonias</a></li>
               <li><a href="#section3" onClick={closeMenu}>Cosméticos</a></li>
             </ul>
@@ -269,6 +272,7 @@ function App() {
               </section>
             </>
           } />
+          <Route path="/ropa" element={<Ropa />} /> {/* Asumiendo que tienes una página de inicio */}
           <Route path="/cart" element={<CartPage userEmail={user?.email} />} />
           <Route path="/offers" element={<OffersPage />} />
           {/* Ruta para la página del carrito */}
