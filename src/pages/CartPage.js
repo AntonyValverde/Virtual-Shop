@@ -52,7 +52,7 @@ const CartPage = ({ userEmail }) => {
   };
 
   const handleOrder = () => {
-    const numero = '63205362'; // Reemplaza con el número al que deseas enviar el mensaje
+    const numero = '50663205362'; // Reemplaza con el número al que deseas enviar el mensaje
     const mensaje = 'Hola, me gustaría hacer un pedido con los siguientes artículos:\n\n';
     const cartItemsMessage = cartItems.map((item, index) => 
       `Artículo ${index + 1}:\n- Título: ${item.title}\n- Precio: ${item.price}\n- Talla: ${item.size}\n- Cantidad: ${item.quantity}\n- Código: ${item.code}\n\n`
