@@ -55,7 +55,7 @@ const CartPage = ({ userEmail }) => {
     if (cartItems.length === 0) return;
 
     // Construye el mensaje
-    const baseUrl = 'https://wa.me/qr/CWKW2X7WZTXXP1?text='; // Tu enlace base de WhatsApp con el código QR
+    const baseUrl = 'https://wa.me/qr/NY5XKEAVL3OBH1'; // Tu enlace base de WhatsApp con el código QR
     let message = 'Hola, me gustaría hacer un pedido con los siguientes artículos:\n\n';
     cartItems.forEach((item, index) => {
       message += `Artículo ${index + 1}:\n`;
