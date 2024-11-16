@@ -52,27 +52,20 @@ const CartPage = ({ userEmail }) => {
   };
 
   const handleOrder = () => {
-    if (cartItems.length === 0) return;
-
-    // Construye el mensaje
-    const baseUrl = 'https://wa.me/qr/NY5XKEAVL3OBH1'; // Tu enlace base de WhatsApp con el código QR
-    let message = 'Hola, me gustaría hacer un pedido con los siguientes artículos:\n\n';
-    cartItems.forEach((item, index) => {
-      message += `Artículo ${index + 1}:\n`;
-      message += `- Título: ${item.title}\n`;
-      message += `- Precio: ${item.price}\n`;
-      message += `- Talla: ${item.size}\n`;
-      message += `- Cantidad: ${item.quantity}\n`;
-      message += `- Código: ${item.code}\n\n`;
-    });
-
-    // Codifica el mensaje para la URL
-    const encodedMessage = encodeURIComponent(message);
-    const fullUrl = `${baseUrl}${encodedMessage}`;
-
+    const numero = '63205362'; // Reemplaza con el número al que deseas enviar el mensaje
+    const mensaje = 'Hola, me gustaría hacer un pedido con los siguientes artículos:\n\n';
+    const cartItemsMessage = cartItems.map((item, index) => 
+      `Artículo ${index + 1}:\n- Título: ${item.title}\n- Precio: ${item.price}\n- Talla: ${item.size}\n- Cantidad: ${item.quantity}\n- Código: ${item.code}\n\n`
+    ).join('');
+    
+    const fullMessage = mensaje + cartItemsMessage;
+    const encodedMessage = encodeURIComponent(fullMessage);
+    const url = `https://wa.me/${numero}?text=${encodedMessage}`;
+  
     // Abre WhatsApp con el mensaje
-    window.open(fullUrl, '_blank');
+    window.open(url, '_blank');
   };
+  
 
   return (
     <div className="cart-page">
