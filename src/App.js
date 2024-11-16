@@ -35,11 +35,11 @@ function App() {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
-        setIsModalOpen(false); // Cierra el modal si hay un usuario autenticado
+        setIsModalOpen(false);  
       }
     });
 
-    return () => unsubscribe(); // Limpia la suscripción cuando el componente se desmonta
+    return () => unsubscribe();  
   }, []);
 
    
@@ -58,7 +58,7 @@ function App() {
   };
 
   const handleCartClick = () => {
-    navigate('/cart'); // Redirige a la página del carrito
+    navigate('/cart');  
   };
 
   const settings = {

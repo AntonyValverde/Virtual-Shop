@@ -1,80 +1,122 @@
-import React, { useState } from 'react';
-import { PublicClientApplication } from '@azure/msal-browser';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FaShoppingCart, FaTrashAlt, FaArrowLeft } from 'react-icons/fa';
+import { db } from '../firebase';
+import { doc, getDoc, updateDoc, arrayRemove } from 'firebase/firestore';
+import './CartPage.css';
 
-// Configura tu cliente MSAL
-const msalConfig = {
-  auth: {
-    clientId: 'TU_CLIENT_ID', // Reemplaza con tu clientId de Azure AD
-    authority: 'https://login.microsoftonline.com/common', // Configuración por defecto
-    redirectUri: window.location.origin, // Cambiar si es necesario
-  },
-};
+const CartPage = ({ userEmail }) => {
+  const navigate = useNavigate();
+  const [cartItems, setCartItems] = useState([]);
 
-const msalInstance = new PublicClientApplication(msalConfig);
-
-const CartPage = () => {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [accessToken, setAccessToken] = useState(null);
-
-  // Iniciar sesión y obtener el token
-  const handleLogin = async () => {
-    try {
-      const loginResponse = await msalInstance.loginPopup({
-        scopes: ['Files.ReadWrite'],
-      });
-      setAccessToken(loginResponse.accessToken);
-      console.log('Inicio de sesión exitoso');
-    } catch (error) {
-      console.error('Error de inicio de sesión:', error);
-    }
-  };
-
-  // Manejar la selección de archivos
-  const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
-  };
-
-  // Subir archivo a OneDrive
-  const uploadFileToOneDrive = async () => {
-    if (!selectedFile) {
-      alert('Por favor, selecciona un archivo primero.');
-      return;
-    }
-    if (!accessToken) {
-      alert('Primero necesitas iniciar sesión.');
-      return;
-    }
-
-    const uploadUrl = `https://graph.microsoft.com/v1.0/me/drive/root:/MiCarpeta/${selectedFile.name}:/content`;
-
-    try {
-      const response = await fetch(uploadUrl, {
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': selectedFile.type,
-        },
-        body: selectedFile,
-      });
-
-      if (response.ok) {
-        console.log('Archivo cargado exitosamente');
-        alert('Archivo cargado exitosamente');
-      } else {
-        console.error('Error al cargar el archivo:', response.statusText);
-        alert('Error al cargar el archivo');
+  useEffect(() => {
+    const fetchCartItems = async () => {
+      if (!userEmail) {
+        console.warn('No hay un correo de usuario proporcionado.');
+        return;
       }
+      try {
+        const cartDocRef = doc(db, 'carrito', userEmail);
+        const cartDoc = await getDoc(cartDocRef);
+
+        if (cartDoc.exists()) {
+          const data = cartDoc.data();
+          console.log('Datos del carrito:', data); 
+          setCartItems(data.items || []);
+        } else {
+          console.warn('El documento del carrito no existe.');
+        }
+      } catch (error) {
+        console.error('Error al obtener los datos del carrito:', error);
+      }
+    };
+
+    fetchCartItems();
+  }, [userEmail]);
+
+  const handleRemoveItem = async (item) => {
+    if (!userEmail) return;
+    try {
+      const cartDocRef = doc(db, 'carrito', userEmail);
+      await updateDoc(cartDocRef, {
+        items: arrayRemove(item), 
+      });
+      setCartItems((prevItems) => prevItems.filter((i) => i.code !== item.code));
     } catch (error) {
-      console.error('Error al cargar el archivo:', error);
-      alert('Error al cargar el archivo');
+      console.error('Error al eliminar el elemento:', error);
     }
+  };
+
+  const handleReturnToHome = () => {
+    navigate('/');
+  };
+
+  const handleOrder = () => {
+    if (cartItems.length === 0) return;
+
+    // Construye el mensaje
+    const baseUrl = 'https://wa.me/qr/CWKW2X7WZTXXP1?text='; // Tu enlace base de WhatsApp con el código QR
+    let message = 'Hola, me gustaría hacer un pedido con los siguientes artículos:\n\n';
+    cartItems.forEach((item, index) => {
+      message += `Artículo ${index + 1}:\n`;
+      message += `- Título: ${item.title}\n`;
+      message += `- Precio: ${item.price}\n`;
+      message += `- Talla: ${item.size}\n`;
+      message += `- Cantidad: ${item.quantity}\n`;
+      message += `- Código: ${item.code}\n\n`;
+    });
+
+    // Codifica el mensaje para la URL
+    const encodedMessage = encodeURIComponent(message);
+    const fullUrl = `${baseUrl}${encodedMessage}`;
+
+    // Abre WhatsApp con el mensaje
+    window.open(fullUrl, '_blank');
   };
 
   return (
-    <div>
-      <button onClick={handleLogin}>Iniciar sesión en OneDrive</button>
-      <input type="file" onChange={handleFileChange} />
-      <button onClick={uploadFileToOneDrive}>Cargar Imagen a OneDrive</button>
+    <div className="cart-page">
+      <header className="cart-header">
+        <button className="return-button" onClick={handleReturnToHome}>
+          <FaArrowLeft size={20} /> Volver
+        </button>
+        <div className="header-content">
+          <FaShoppingCart size={30} className="cart-icon" />
+          <h1>Mi Carrito</h1>
+        </div>
+      </header>
+
+      <main className="cart-main">
+        {cartItems.length > 0 ? (
+          <div className="cart-items">
+            {cartItems.map((item, index) => (
+              <div key={index} className="cart-item">
+                <img src={item.imagen} alt={item.title} className="cart-item-image" />
+                <div className="cart-item-details">
+                  <h2>{item.title}</h2>
+                  <p><strong>Precio:</strong> {item.price}</p>
+                  <p><strong>Talla:</strong> {item.size}</p>
+                  <p><strong>Cantidad:</strong> {item.quantity}</p>
+                  <p><strong>Código:</strong> {item.code}</p>
+                </div>
+                <button className="remove-button" onClick={() => handleRemoveItem(item)}>
+                  <FaTrashAlt className="remove-icon" /> Eliminar
+                </button>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="empty-cart">Tu carrito está vacío.</p>
+        )}
+      </main>
+
+      {cartItems.length > 0 && (
+        <footer className="cart-footer">
+          <button className="order-button" onClick={handleOrder}>
+            Hacer Pedido
+          </button>
+        </footer>
+      )}
     </div>
   );
 };
