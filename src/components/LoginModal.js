@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { auth, db } from '../firebase'; // Importa la instancia de Firestore
-import { doc, setDoc, getDoc } from 'firebase/firestore'; // Importa las funciones necesarias de Firestore
+import { auth, db } from '../firebase';
+import { doc,setDoc, getDoc } from 'firebase/firestore'; // No necesitas setDoc aquí
 import { FaTimes, FaEnvelope, FaLock, FaGoogle } from 'react-icons/fa';
 import './LoginModal.css';
 
@@ -17,13 +17,31 @@ const LoginModal = ({ isOpen, onClose }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      onClose();
-      navigate('/');
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+  
+      // Verifica si el usuario está en la colección "inicio"
+      const userDocRef = doc(db, 'inicio', user.uid);
+      const userDoc = await getDoc(userDocRef);
+  
+      if (userDoc.exists()) {
+        console.log('El usuario tiene acceso. Redirigiendo a la página de Admin...');
+        onClose();
+        navigate('/admin'); // Redirige si el usuario tiene acceso
+      }else if (!userDoc.exists()) {
+        console.log(`El documento no existe para el UID: ${user.uid}`);
+        setError(`No se encontró acceso para el usuario con UID: ${user.uid}`);
+      } else {
+        console.log('El usuario no tiene permisos. No se redirigirá.');
+        setError('Acceso denegado. No tienes permisos para acceder.');
+      }
+      
     } catch (error) {
-      setError('Error al iniciar sesión: ' + error.message);
+      console.error('Error al iniciar sesión:', error);
+      setError('Error al iniciar sesión');
     }
   };
+  
 
   const handleGoogleLogin = async () => {
     const provider = new GoogleAuthProvider();
@@ -41,15 +59,11 @@ const LoginModal = ({ isOpen, onClose }) => {
           correo: user.email,
           uid: user.uid
         });
-        console.log('Usuario agregado a la colección "inicio"');
-      } else {
-        console.log('El usuario ya existe en la colección "inicio"');
       }
 
       onClose();
-      navigate('/');
+      navigate('/'); // Redirige a la página de inicio después de iniciar sesión
     } catch (error) {
-      console.error('Error al iniciar sesión con Google', error);
       setError('Error al iniciar sesión con Google: ' + error.message);
     }
   };
@@ -94,7 +108,7 @@ const LoginModal = ({ isOpen, onClose }) => {
           </button>
         </form>
         <p className="modal-footer">
-          ¿No tienes una cuenta? <a href="/register">Regístrate</a>
+          ¿No tienes una cuenta? Inicia con google.
         </p>
         <div className="social-login">
           <button className="google-login-button" onClick={handleGoogleLogin}>

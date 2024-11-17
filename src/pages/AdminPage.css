@@ -1,0 +1,122 @@
+.admin-page {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+
+.admin-header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.logout-button {
+    padding: 10px 20px;
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.logout-button:hover {
+    background-color: #c9302c;
+}
+
+.admin-main {
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+.user-folder {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.folder-header {
+    padding: 10px;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.folder-header:hover {
+    background-color: #e0e0e0;
+}
+
+.folder-content {
+    padding: 10px;
+    background-color: #fafafa;
+}
+
+.order-item {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+.order-item img {
+    max-width: 100px;
+    height: auto;
+    margin-top: 5px;
+    display: block;
+}
+
+
+.order-item p {
+    margin: 5px 0;
+}
+
+.order-item strong {
+    font-weight: bold;
+}
+
+.search-bar-container {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.search-bar {
+    padding: 10px;
+    width: 80%;
+    max-width: 400px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.search-bar:focus {
+    border-color: #007bff;
+}
+
+.users-list {
+    margin-top: 20px;
+}
+
+.user-item {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.user-item p {
+    margin: 5px 0;
+}

@@ -21,7 +21,7 @@ const CartPage = ({ userEmail }) => {
 
         if (cartDoc.exists()) {
           const data = cartDoc.data();
-          console.log('Datos del carrito:', data); 
+          console.log('Datos del carrito:', data);
           setCartItems(data.items || []);
         } else {
           console.warn('El documento del carrito no existe.');
@@ -39,7 +39,7 @@ const CartPage = ({ userEmail }) => {
     try {
       const cartDocRef = doc(db, 'carrito', userEmail);
       await updateDoc(cartDocRef, {
-        items: arrayRemove(item), 
+        items: arrayRemove(item),
       });
       setCartItems((prevItems) => prevItems.filter((i) => i.code !== item.code));
     } catch (error) {
@@ -51,21 +51,45 @@ const CartPage = ({ userEmail }) => {
     navigate('/');
   };
 
-  const handleOrder = () => {
-    const numero = '50663205362'; // Reemplaza con el número al que deseas enviar el mensaje
-    const mensaje = 'Hola, me gustaría hacer un pedido con los siguientes artículos:\n\n';
-    const cartItemsMessage = cartItems.map((item, index) => 
-      `Artículo ${index + 1}:\n- Título: ${item.title}\n- Precio: ${item.price}\n- Talla: ${item.size}\n- Cantidad: ${item.quantity}\n- Código: ${item.code}\n\n`
-    ).join('');
+  const handleOrder = async () => {
+    if (!userEmail) {
+      console.warn('No hay un correo de usuario proporcionado.');
+      return;
+    }
+
+    try {
+      const cartDocRef = doc(db, 'carrito', userEmail);
+      const cartDoc = await getDoc(cartDocRef);
+
+      if (cartDoc.exists()) {
+        const existingCart = cartDoc.data().items || [];
+        const updatedCart = existingCart.map(item => ({
+          ...item,
+          compra: 'pedido'
+        }));
+
+        await updateDoc(cartDocRef, { items: updatedCart });
+        setCartItems(updatedCart);
+        console.log('El valor de "compra" ha sido actualizado a "pedido" para todos los artículos.');
+      } else {
+        console.warn('El documento del carrito no existe.');
+      }
+
+      const numero = '50663205362';
+      const mensaje = 'Hola, me gustaría hacer un pedido con los siguientes artículos:\n\n';
+      const cartItemsMessage = cartItems.map((item, index) => 
+        `Artículo ${index + 1}:\n- Título: ${item.title}\n- Precio: ${item.price}\n- Talla: ${item.size}\n- Cantidad: ${item.quantity}\n- Código: ${item.code}\n\n`
+      ).join('');
+      
+      const fullMessage = mensaje + cartItemsMessage;
+      const encodedMessage = encodeURIComponent(fullMessage);
+      const url = `https://wa.me/${numero}?text=${encodedMessage}`;
     
-    const fullMessage = mensaje + cartItemsMessage;
-    const encodedMessage = encodeURIComponent(fullMessage);
-    const url = `https://wa.me/${numero}?text=${encodedMessage}`;
-  
-    // Abre WhatsApp con el mensaje
-    window.open(url, '_blank');
+      window.open(url, '_blank');
+    } catch (error) {
+      console.error('Error al actualizar el valor de "compra":', error);
+    }
   };
-  
 
   return (
     <div className="cart-page">

@@ -14,6 +14,7 @@ import CartPage from './pages/CartPage';
 import OffersPage from './pages/OffersPage';
 import Ropa from './pages/Ropa'; // Ajusta la ruta si es necesario
 import Colonia from './pages/Colonia';
+import AdminPage from './pages/AdminPage';
 
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,23 +27,23 @@ function App() {
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
-  
+
   const closeMenu = () => {
     setMenuOpen(false);
   };
-  
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
-        setIsModalOpen(false);  
+        setIsModalOpen(false);
       }
     });
 
-    return () => unsubscribe();  
+    return () => unsubscribe();
   }, []);
 
-   
+
 
   const handleLogout = () => {
     signOut(auth).then(() => {
@@ -58,7 +59,7 @@ function App() {
   };
 
   const handleCartClick = () => {
-    navigate('/cart');  
+    navigate('/cart');
   };
 
   const settings = {
@@ -217,6 +218,8 @@ function App() {
               </button>
             )}
           </div>
+
+
         </nav>
       </header>
 
@@ -272,6 +275,7 @@ function App() {
               </section>
             </>
           } />
+          <Route path="/admin" element={<AdminPage />} />
           <Route path="/colonia" element={<Colonia />} />
           <Route path="/ropa" element={<Ropa />} /> {/* Asumiendo que tienes una página de inicio */}
           <Route path="/cart" element={<CartPage userEmail={user?.email} />} />

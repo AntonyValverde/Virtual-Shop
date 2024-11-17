@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ImageDetailsModal from '../components/ImageDetailsModal';
+import ImageDetailsModalCo from '../components/ImageDetailsModalColonia';
 import './ropa.css';
 
 // Importamos las imágenes de manera dinámica desde el directorio `fotosMacho`
@@ -16,7 +16,6 @@ const ropaDataCA = sortedCA.map((image, index) => ({
     image: image.default || image,
     title: 'Colonia',
     price: '₡5000',
-    sizes: ['S', 'M', 'L', 'XL'],
     code: `CA${String(index + 1).padStart(4, '0')}`,
     description: `Descripción de Camisa ${index + 1}`,
 }));
@@ -34,7 +33,7 @@ const ropaDataCA = sortedCA.map((image, index) => ({
 function Colonia() {
     const [selectedRopa, setSelectedRopa] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [searchTerm, setSearchTerm] = useState(''); // Estado para el término de búsqueda
+    const [searchTerm, setSearchTerm] = useState(''); 
     const navigate = useNavigate();
 
     const handleBackToHome = () => {
@@ -77,7 +76,7 @@ function Colonia() {
             </div>
 
             {selectedRopa && (
-                <ImageDetailsModal
+                <ImageDetailsModalCo
                     isOpen={isModalOpen}
                     onClose={() => setIsModalOpen(false)}
                     imageDetails={selectedRopa}
