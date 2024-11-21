@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-route
 import { FaShoppingCart, FaUserCircle } from 'react-icons/fa';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { FaSearch } from "react-icons/fa";
 import './App.css';
 import LoginModal from './components/LoginModal';
 import ImageDetailsModal from './components/ImageDetailsModal';
@@ -15,6 +16,7 @@ import OffersPage from './pages/OffersPage';
 import Ropa from './pages/Ropa'; // Ajusta la ruta si es necesario
 import Colonia from './pages/Colonia';
 import AdminPage from './pages/AdminPage';
+import Gorras from './pages/GorraPage';
 
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -189,13 +191,14 @@ function App() {
         <h1>StyLux</h1>
         <nav>
           <button className="hamburger-menu" onClick={toggleMenu}>
-            ☰
+            <FaSearch className='icon-button'/>
           </button>
           <nav>
             <ul className={`nav-links ${menuOpen ? 'active' : ''}`}>
+
               <li><Link to="/ropa" onClick={closeMenu}>Ropa</Link></li>
               <li><Link to="/colonia" onClick={closeMenu}>Colonias</Link></li>
-              <li><a href="#section3" onClick={closeMenu}>Cosméticos</a></li>
+              <li><Link to="/gorras" onClick={closeMenu}>Gorras</Link></li>
             </ul>
           </nav>
 
@@ -277,6 +280,7 @@ function App() {
           } />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/colonia" element={<Colonia />} />
+          <Route path="/gorras" element={<Gorras />} />
           <Route path="/ropa" element={<Ropa />} /> {/* Asumiendo que tienes una página de inicio */}
           <Route path="/cart" element={<CartPage userEmail={user?.email} />} />
           <Route path="/offers" element={<OffersPage />} />
@@ -287,7 +291,7 @@ function App() {
       <footer className="footer">
         <div className="footer-content">
           <div className="footer-section">
-            <h3>StiloLux</h3>
+            <h3>StyLux</h3>
             <p>La mejor tienda virtual para todas tus necesidades.</p>
           </div>
           <div className="footer-section">
@@ -300,15 +304,14 @@ function App() {
           </div>
           <div className="footer-section">
             <h4>Síguenos</h4>
-            <div className="social-icons">
+            <div className="">
               <a href="https://www.instagram.com/choma__store?igsh=dTR0czBjaDFjcDN2" aria-label="Facebook" className="social-icon">Instagram</a>
-              <a href="#" aria-label="Twitter" className="social-icon">🔗</a>
-              <a href="#" aria-label="Instagram" className="social-icon">🔗</a>
+               
             </div>
           </div>
         </div>
         <div className="footer-bottom">
-          <p>© 2024 StiloLux - Todos los derechos reservados.</p>
+          <p>© 2024 StyLux - Todos los derechos reservados.</p>
         </div>
       </footer>
 
