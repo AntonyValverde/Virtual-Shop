@@ -51,7 +51,7 @@ function Gorras() {
 
     return (
         <div className="ropa-page">
-            <h1>Ropa</h1>
+            <h1>Gorras</h1>
             <div className="top-bar">
                 <button className="back-button" onClick={handleBackToHome}>Regresar a Inicio</button>
                 <input
