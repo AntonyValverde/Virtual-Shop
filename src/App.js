@@ -100,29 +100,29 @@ function App() {
   const imagesRopa = [
     {
       id: 1,
-      image: '/photos/ropa/ropa.jpg',
-      title: 'Ropa 1',
+      image: '/photos/ropa/ropa.jpeg',
+      title: 'Ropa',
       price: '$20',
       sizes: ['S', 'M', 'L'],
-      code: 'R001',
+      code: 'RO0001',
       description: 'Descripción de Ropa 1',
     },
     {
       id: 2,
-      image: '/photos/ropa/ropa2.jpg',
-      title: 'Ropa 2',
+      image: '/photos/ropa/ropa2.jpeg',
+      title: 'Ropa',
       price: '$25',
       sizes: ['M', 'L', 'XL'],
-      code: 'R002',
+      code: 'RO0002',
       description: 'Descripción de Ropa 2',
     },
     {
       id: 3,
-      image: '/photos/ropa/ropa3.jpg',
-      title: 'Ropa 3',
+      image: '/photos/ropa/ropa3.jpeg',
+      title: 'Ropa',
       price: '$30',
       sizes: ['S', 'M'],
-      code: 'R003',
+      code: 'RO0003',
       description: 'Descripción de Ropa 3',
     },
   ];
@@ -133,7 +133,7 @@ function App() {
       title: 'Colonia 1',
       price: '$35',
       sizes: ['S', 'M', 'L'],
-      code: 'C001',
+      code: 'C0001',
       description: 'Descripción de Colonia 1',
     },
     {
@@ -142,7 +142,7 @@ function App() {
       title: 'Colonia 2',
       price: '$40',
       sizes: ['M', 'L', 'XL'],
-      code: 'C002',
+      code: 'C0002',
       description: 'Descripción de Colonia 2',
     },
     {
@@ -151,7 +151,7 @@ function App() {
       title: 'Colonia 3',
       price: '$45',
       sizes: ['S', 'M'],
-      code: 'C003',
+      code: 'C0003',
       description: 'Descripción de Colonia 3',
     },
   ];
@@ -162,7 +162,7 @@ function App() {
       title: 'Cosmético 1',
       price: '$50',
       sizes: ['S', 'M', 'L'],
-      code: 'CS001',
+      code: 'CS0001',
       description: 'Descripción de Cosmético 1',
     },
     {
@@ -171,19 +171,37 @@ function App() {
       title: 'Cosmético 2',
       price: '$55',
       sizes: ['M', 'L', 'XL'],
-      code: 'CS002',
+      code: 'CS0002',
       description: 'Descripción de Cosmético 2',
     },
     {
       id: 3,
       image: '/photos/cosmeticos/cos3.jpg',
       title: 'Cosmético 3',
-      price: '$60',
+      price: '₡60',
       sizes: ['S', 'M'],
-      code: 'CS003',
+      code: 'CS0003',
       description: 'Descripción de Cosmético 3',
     },
   ];
+
+  // Importamos las imágenes de manera dinámica desde el directorio `fotosMacho`
+  const importAll = (r) => r.keys().map(r);
+  const CA = importAll(require.context('/public/photos/gorras', false, /\.jpeg$/));
+  //const ST = importAll(require.context('/public/photos/fotosST0001', false, /\.jpeg$/));
+
+  const sortedCA = CA.sort((a, b) => a.localeCompare(b));
+  //const sortedST = ST.sort((a, b) => a.localeCompare(b));
+
+  const imagesGorras = sortedCA.map((image, index) => ({
+    id: index + 1,
+    image: image.default || image,
+    title: 'Gorra',
+    price: '₡10000',
+    sizes: ['Ajustable'],
+    code: `GO${String(index + 1).padStart(4, '0')}`,
+    description: `Gorra ${index + 1}`,
+  }));
 
   return (
     <div className="App">
@@ -191,7 +209,7 @@ function App() {
         <h1>StyLux</h1>
         <nav>
           <button className="hamburger-menu" onClick={toggleMenu}>
-            <FaSearch className='icon-button'/>
+            <FaSearch className='icon-button' />
           </button>
           <nav>
             <ul className={`nav-links ${menuOpen ? 'active' : ''}`}>
@@ -276,6 +294,16 @@ function App() {
                   ))}
                 </Slider>
               </section>
+              <section id="section4">
+                <h2>Gorras</h2>
+                <Slider {...settings}>
+                  {imagesGorras.map((img) => (
+                    <div key={img.id} className="carousel-slide" onClick={() => handleImageClick(img)}>
+                      <img src={img.image} alt={img.title} />
+                    </div>
+                  ))}
+                </Slider>
+              </section>
             </>
           } />
           <Route path="/admin" element={<AdminPage />} />
@@ -306,7 +334,7 @@ function App() {
             <h4>Síguenos</h4>
             <div className="">
               <a href="https://www.instagram.com/choma__store?igsh=dTR0czBjaDFjcDN2" aria-label="Facebook" className="social-icon">Instagram</a>
-               
+
             </div>
           </div>
         </div>
